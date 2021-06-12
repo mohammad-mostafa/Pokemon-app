@@ -4,15 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.mo.pokeapp.R
 import com.mo.pokeapp.data.viewobject.SpeciesListVO
+import com.mo.pokeapp.databinding.LayoutSpeciesCellBinding
 
 class SpeciesListAdapter : PagingDataAdapter<SpeciesListVO, SpeciesViewHolder>(SpeciesComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpeciesViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.layout_species_cell, parent, false)
-        return SpeciesViewHolder(view)
+        val itemBinding =
+            LayoutSpeciesCellBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SpeciesViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: SpeciesViewHolder, position: Int) {
