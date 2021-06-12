@@ -68,9 +68,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     // okhttp interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
-    // Rx
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-RC-native-mt"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0-RC-native-mt"
+    // life cycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 
     // room
     def room_version = "2.3.0"
@@ -81,8 +83,6 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
-    // optional - RxJava support for Room
-    implementation "androidx.room:room-rxjava2:$room_version"
 
     // preferences
     implementation 'androidx.preference:preference-ktx:1.1.1'
@@ -90,4 +90,16 @@ dependencies {
     // mockito
     testImplementation 'org.mockito:mockito-core:3.10.0'
     testImplementation 'org.mockito:mockito-inline:2.8.47'
+
+    // paging
+    def paging_version = "3.0.0"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    // alternatively - without Android dependencies for tests
+    testImplementation "androidx.paging:paging-common-ktx:$paging_version"
+
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    // Skip this if you don't want to use integration libraries or configure Glide.
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
 }
