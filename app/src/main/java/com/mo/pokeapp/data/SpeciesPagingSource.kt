@@ -1,5 +1,6 @@
 package com.mo.pokeapp.data
 
+import android.net.Uri
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.mo.pokeapp.data.dao.SpeciesListNetworkDao
@@ -19,13 +20,21 @@ class SpeciesPagingSource @Inject constructor(private val speciesListNetworkDao:
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SpeciesResult> {
         return try {
-            // Start refresh at page 1 if undefined.
-            val nextPageNumber = if (params.key != null) params.key else 0
-            val response = speciesListNetworkDao.getSpeciesList(nextPageNumber!!, DEFAULT_PAGE_SIZE)
+
+            val nextPageNumber = params.key ?: 0
+            val response = speciesListNetworkDao.getSpeciesList(nextPageNumber, DEFAULT_PAGE_SIZE)
+
+            var offset: String? = null
+            val nextUrl = response.nextUrl
+            nextUrl?.let {
+                val uri: Uri = Uri.parse(it)
+                offset = uri.getQueryParameter("offset")
+            }
+
             return LoadResult.Page(
                 data = response.list,
                 prevKey = null, // Only paging forward.
-                nextKey = nextPageNumber + 20
+                nextKey = offset?.toInt()
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
