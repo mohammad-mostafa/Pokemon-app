@@ -17,7 +17,8 @@
         android:name="com.mo.pokeapp.fragments.DetailsFragment"
         android:label="DetailsFragment">
         <argument
-            android:name="speciesId"
-            app:argType="integer" />
+            android:name="detailsUrl"
+            app:argType="string"
+            app:nullable="true"/>
     </fragment>
 </navigation>

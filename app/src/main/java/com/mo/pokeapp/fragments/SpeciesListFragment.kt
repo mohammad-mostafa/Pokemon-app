@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mo.pokeapp.adapters.SpeciesListAdapter
@@ -17,8 +15,6 @@ import com.mo.pokeapp.data.viewobject.SpeciesListVO
 import com.mo.pokeapp.databinding.FragmentSpeciesListBinding
 import com.mo.pokeapp.viewmodels.SpeciesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -51,22 +47,18 @@ class SpeciesListFragment : BaseFragment() {
 
         setUpRecyclerView()
 
-        viewLifecycleOwner.lifecycleScope.launch {
-
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                viewModel.fetchSpeciesList().distinctUntilChanged().collectLatest {
-                    adapter.submitData(it)
-                }
+        viewModel.speciesList.observe(viewLifecycleOwner, {
+            viewLifecycleOwner.lifecycleScope.launch {
+                adapter.submitData(it)
             }
-        }
+        })
 
         viewModel.navigateToDetails.observe(viewLifecycleOwner, {
 
-            it.getContentIfNotHandled()?.let { id ->
+            it.getContentIfNotHandled()?.let { url ->
 
                 val action =
-                    SpeciesListFragmentDirections.actionSpeciesListFragmentToDetailsFragment(id)
+                    SpeciesListFragmentDirections.actionSpeciesListFragmentToDetailsFragment(url)
                 findNavController().navigate(action)
             }
         })

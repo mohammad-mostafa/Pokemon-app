@@ -1,6 +1,7 @@
 package com.mo.pokeapp.network
 
 import com.mo.pokeapp.BuildConfig
+import com.mo.pokeapp.data.dto.SpeciesDetailsResponse
 import com.mo.pokeapp.data.dto.SpeciesListResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -8,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface APIService {
 
@@ -16,6 +18,9 @@ interface APIService {
         @Query("offset") offset: Int,
         @Query("limit") limit: Int
     ): SpeciesListResponse
+
+    @GET
+    suspend fun getSpeciesDetails(@Url url: String): SpeciesDetailsResponse
 
     companion object {
         fun create(): APIService {
