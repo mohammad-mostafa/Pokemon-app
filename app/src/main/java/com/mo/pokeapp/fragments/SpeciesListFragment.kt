@@ -5,10 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mo.pokeapp.adapters.SpeciesListAdapter
+import com.mo.pokeapp.adapters.SpeciesViewHolder
 import com.mo.pokeapp.core.BaseFragment
+import com.mo.pokeapp.data.viewobject.SpeciesListVO
 import com.mo.pokeapp.databinding.FragmentSpeciesListBinding
 import com.mo.pokeapp.viewmodels.SpeciesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +30,11 @@ class SpeciesListFragment : BaseFragment() {
     private val viewModel: SpeciesListViewModel by viewModels()
 
     private val adapter by lazy {
-        SpeciesListAdapter()
+        SpeciesListAdapter(object : SpeciesViewHolder.SpeciesViewHolderCallback {
+            override fun onSpeciesClicked(item: SpeciesListVO?) {
+                viewModel.onSpeciesItemClicked(item)
+            }
+        })
     }
 
     override fun onCreateView(
@@ -42,11 +51,25 @@ class SpeciesListFragment : BaseFragment() {
 
         setUpRecyclerView()
 
-        lifecycleScope.launch {
-            viewModel.fetchSpeciesList().distinctUntilChanged().collectLatest {
-                adapter.submitData(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                viewModel.fetchSpeciesList().distinctUntilChanged().collectLatest {
+                    adapter.submitData(it)
+                }
             }
         }
+
+        viewModel.navigateToDetails.observe(viewLifecycleOwner, {
+
+            it.getContentIfNotHandled()?.let { id ->
+
+                val action =
+                    SpeciesListFragmentDirections.actionSpeciesListFragmentToDetailsFragment(id)
+                findNavController().navigate(action)
+            }
+        })
     }
 
     private fun setUpRecyclerView() {
@@ -56,8 +79,8 @@ class SpeciesListFragment : BaseFragment() {
         rv.adapter = adapter
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }

@@ -38,5 +38,8 @@ interface APIService {
 
             return builder.build()
         }
+
+        fun photoUrl(id: Int): String =
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png"
     }
 }

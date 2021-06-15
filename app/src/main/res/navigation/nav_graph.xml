@@ -7,5 +7,17 @@
     <fragment
         android:id="@+id/speciesListFragment"
         android:name="com.mo.pokeapp.fragments.SpeciesListFragment"
-        android:label="SpeciesListFragment" />
+        android:label="SpeciesListFragment">
+        <action
+            android:id="@+id/action_speciesListFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.mo.pokeapp.fragments.DetailsFragment"
+        android:label="DetailsFragment">
+        <argument
+            android:name="speciesId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

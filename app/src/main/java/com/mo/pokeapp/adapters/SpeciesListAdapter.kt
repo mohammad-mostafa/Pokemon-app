@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import com.mo.pokeapp.data.viewobject.SpeciesListVO
 import com.mo.pokeapp.databinding.LayoutSpeciesCellBinding
 
-class SpeciesListAdapter : PagingDataAdapter<SpeciesListVO, SpeciesViewHolder>(SpeciesComparator) {
+class SpeciesListAdapter(private val callback: SpeciesViewHolder.SpeciesViewHolderCallback?) :
+    PagingDataAdapter<SpeciesListVO, SpeciesViewHolder>(SpeciesComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpeciesViewHolder {
         val itemBinding =
             LayoutSpeciesCellBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SpeciesViewHolder(itemBinding)
+        return SpeciesViewHolder(itemBinding, callback)
     }
 
     override fun onBindViewHolder(holder: SpeciesViewHolder, position: Int) {
