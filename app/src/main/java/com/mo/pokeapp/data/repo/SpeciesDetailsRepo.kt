@@ -22,6 +22,11 @@ class SpeciesDetailsRepo @Inject constructor(private val speciesDetailsNetworkDa
         }
 
     private fun mapNetworkResponseToViewObject(response: SpeciesDetailsResponse): SpeciesDetailsVO {
-        return SpeciesDetailsVO(response.name, response.evolutionChainUrl.url)
+
+        val flavors = response.flavors.filter {
+            it.lang.name == "en"
+        }.map { it.flavorText }
+
+        return SpeciesDetailsVO(response.name, response.evolutionChainUrl.url, flavors)
     }
 }
