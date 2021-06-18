@@ -2,7 +2,7 @@ package com.mo.pokeapp.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mo.pokeapp.data.viewobject.SpeciesListVO
+import com.mo.pokeapp.data.viewobject.SpeciesVO
 import com.mo.pokeapp.databinding.LayoutSpeciesCellBinding
 
 class SpeciesViewHolder(
@@ -12,10 +12,10 @@ class SpeciesViewHolder(
     RecyclerView.ViewHolder(binding.root) {
 
     interface SpeciesViewHolderCallback {
-        fun onSpeciesClicked(item: SpeciesListVO?)
+        fun onSpeciesClicked(item: SpeciesVO?)
     }
 
-    fun bind(item: SpeciesListVO?) {
+    fun bind(item: SpeciesVO?) {
         binding.nameTv.text = item?.name
 
         Glide.with(binding.root.context)

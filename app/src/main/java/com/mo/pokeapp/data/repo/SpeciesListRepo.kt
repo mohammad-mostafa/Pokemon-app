@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.mo.pokeapp.data.SpeciesPagingSource
 import com.mo.pokeapp.data.dao.SpeciesListNetworkDao
-import com.mo.pokeapp.data.viewobject.SpeciesListVO
+import com.mo.pokeapp.data.viewobject.SpeciesVO
 import com.mo.pokeapp.network.APIService
 import com.mo.pokeapp.utils.DEFAULT_PAGE_SIZE
 import com.mo.pokeapp.utils.UrlUtils
@@ -19,7 +19,7 @@ class SpeciesListRepo @Inject constructor(
     private val networkDao: SpeciesListNetworkDao
 ) {
 
-    fun speciesResultFlow(pagingConfig: PagingConfig = getDefaultPageConfig()): Flow<PagingData<SpeciesListVO>> {
+    fun speciesResultFlow(pagingConfig: PagingConfig = getDefaultPageConfig()): Flow<PagingData<SpeciesVO>> {
         return Pager(
             config = pagingConfig,
             pagingSourceFactory = { SpeciesPagingSource(urlUtils, networkDao) }
@@ -27,7 +27,7 @@ class SpeciesListRepo @Inject constructor(
             pagingData.map {
                 val id = urlUtils.getLastPathSegment(it.url)
                 val photoUrl = APIService.photoUrl(id)
-                SpeciesListVO(it.name, it.url, photoUrl)
+                SpeciesVO(it.name, it.url, photoUrl)
             }
         }
     }

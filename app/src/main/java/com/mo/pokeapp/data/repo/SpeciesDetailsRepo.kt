@@ -22,6 +22,6 @@ class SpeciesDetailsRepo @Inject constructor(private val speciesDetailsNetworkDa
         }
 
     private fun mapNetworkResponseToViewObject(response: SpeciesDetailsResponse): SpeciesDetailsVO {
-        return SpeciesDetailsVO(response.name)
+        return SpeciesDetailsVO(response.name, response.evolutionChainUrl.url)
     }
 }

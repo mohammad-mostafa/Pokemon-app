@@ -1,6 +1,7 @@
 package com.mo.pokeapp.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,10 @@ class DetailsFragment : BaseFragment() {
 
         viewModel.speciesDetails.observe(viewLifecycleOwner, {
             binding.nameTv.text = it.name
+        })
+
+        viewModel.evolutionChain.observe(viewLifecycleOwner, {
+            Log.d("TAG", it.toString())
         })
     }
 

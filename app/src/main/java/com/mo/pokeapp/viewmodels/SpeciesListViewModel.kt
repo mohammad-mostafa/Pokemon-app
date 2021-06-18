@@ -3,7 +3,7 @@ package com.mo.pokeapp.viewmodels
 import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import com.mo.pokeapp.data.repo.SpeciesListRepo
-import com.mo.pokeapp.data.viewobject.SpeciesListVO
+import com.mo.pokeapp.data.viewobject.SpeciesVO
 import com.mo.pokeapp.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,7 +21,7 @@ class SpeciesListViewModel @Inject constructor(
         speciesListRepo.speciesResultFlow().cachedIn(viewModelScope).asLiveData()
     }
 
-    fun onSpeciesItemClicked(item: SpeciesListVO?) {
+    fun onSpeciesItemClicked(item: SpeciesVO?) {
         item?.url?.let { url ->
             _navigateToDetails.value = Event(url)
         }

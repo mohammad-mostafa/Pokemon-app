@@ -1,6 +1,7 @@
 package com.mo.pokeapp.network
 
 import com.mo.pokeapp.BuildConfig
+import com.mo.pokeapp.data.dto.EvolutionChainResponse
 import com.mo.pokeapp.data.dto.SpeciesDetailsResponse
 import com.mo.pokeapp.data.dto.SpeciesListResponse
 import okhttp3.OkHttpClient
@@ -21,6 +22,9 @@ interface APIService {
 
     @GET
     suspend fun getSpeciesDetails(@Url url: String): SpeciesDetailsResponse
+
+    @GET
+    suspend fun getEvolutionChain(@Url url: String): EvolutionChainResponse
 
     companion object {
         fun create(): APIService {

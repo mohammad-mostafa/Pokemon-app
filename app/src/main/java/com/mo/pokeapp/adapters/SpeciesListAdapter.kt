@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.mo.pokeapp.data.viewobject.SpeciesListVO
+import com.mo.pokeapp.data.viewobject.SpeciesVO
 import com.mo.pokeapp.databinding.LayoutSpeciesCellBinding
 
 class SpeciesListAdapter(private val callback: SpeciesViewHolder.SpeciesViewHolderCallback?) :
-    PagingDataAdapter<SpeciesListVO, SpeciesViewHolder>(SpeciesComparator) {
+    PagingDataAdapter<SpeciesVO, SpeciesViewHolder>(SpeciesComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpeciesViewHolder {
         val itemBinding =
@@ -20,12 +20,12 @@ class SpeciesListAdapter(private val callback: SpeciesViewHolder.SpeciesViewHold
         holder.bind(getItem(position))
     }
 
-    object SpeciesComparator : DiffUtil.ItemCallback<SpeciesListVO>() {
+    object SpeciesComparator : DiffUtil.ItemCallback<SpeciesVO>() {
 
-        override fun areItemsTheSame(oldItem: SpeciesListVO, newItem: SpeciesListVO): Boolean =
+        override fun areItemsTheSame(oldItem: SpeciesVO, newItem: SpeciesVO): Boolean =
             oldItem == newItem
 
-        override fun areContentsTheSame(oldItem: SpeciesListVO, newItem: SpeciesListVO): Boolean =
+        override fun areContentsTheSame(oldItem: SpeciesVO, newItem: SpeciesVO): Boolean =
             oldItem == newItem
     }
 }
