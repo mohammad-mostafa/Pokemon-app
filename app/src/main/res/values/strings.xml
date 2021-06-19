@@ -2,4 +2,6 @@
     <string name="app_name">PokeApp</string>
     <string name="ok">Ok</string>
     <string name="general_error">An error happened. Please, try again later.</string>
+    <string name="flavours">Flavors</string>
+    <string name="evolution_chain">Evolution chain</string>
 </resources>

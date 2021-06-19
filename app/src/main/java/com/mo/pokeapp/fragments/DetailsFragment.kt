@@ -8,8 +8,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mo.pokeapp.R
 import com.mo.pokeapp.adapters.EvolutionChainAdapter
 import com.mo.pokeapp.adapters.FlavorsAdapter
+import com.mo.pokeapp.adapters.TitleAdapter
 import com.mo.pokeapp.core.BaseFragment
 import com.mo.pokeapp.databinding.FragmentDetailsBinding
 import com.mo.pokeapp.viewmodels.SpeciesDetailsViewModel
@@ -27,6 +29,23 @@ class DetailsFragment : BaseFragment() {
 
     private val flavorsAdapter by lazy {
         FlavorsAdapter()
+    }
+
+    private val flavorsTitleAdapter by lazy {
+        TitleAdapter()
+    }
+
+    private val evolutionChainTitleAdapter by lazy {
+        TitleAdapter()
+    }
+
+    private val concatAdapter by lazy {
+        ConcatAdapter().also {
+            it.addAdapter(evolutionChainTitleAdapter)
+            it.addAdapter(evolutionChainAdapter)
+            it.addAdapter(flavorsTitleAdapter)
+            it.addAdapter(flavorsAdapter)
+        }
     }
 
     private val viewModel: SpeciesDetailsViewModel by viewModels()
@@ -50,10 +69,12 @@ class DetailsFragment : BaseFragment() {
 
         viewModel.speciesDetails.observe(viewLifecycleOwner, {
             binding.nameTv.text = it.name
+            flavorsTitleAdapter.submitList(listOf(getString(R.string.flavours)))
             flavorsAdapter.submitList(it.flavorTexts)
         })
 
         viewModel.evolutionChain.observe(viewLifecycleOwner, {
+            evolutionChainTitleAdapter.submitList(listOf(getString(R.string.evolution_chain)))
             evolutionChainAdapter.submitList(it)
         })
     }
@@ -62,7 +83,7 @@ class DetailsFragment : BaseFragment() {
         val rv = binding.recyclerView
         rv.setHasFixedSize(true)
         rv.layoutManager = LinearLayoutManager(context)
-        rv.adapter = ConcatAdapter(flavorsAdapter, evolutionChainAdapter)
+        rv.adapter = concatAdapter
     }
 
     override fun onDestroyView() {
