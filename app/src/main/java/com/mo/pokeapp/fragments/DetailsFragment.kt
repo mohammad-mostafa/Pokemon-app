@@ -39,7 +39,7 @@ class DetailsFragment : BaseFragment() {
         })
 
         viewModel.evolutionChain.observe(viewLifecycleOwner, {
-            TODO()
+
         })
     }
 
