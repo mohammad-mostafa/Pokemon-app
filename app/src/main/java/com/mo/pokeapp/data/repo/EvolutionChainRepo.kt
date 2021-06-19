@@ -1,8 +1,11 @@
 package com.mo.pokeapp.data.repo
 
+import com.mo.pokeapp.data.dao.EvolutionChainDbDao
 import com.mo.pokeapp.data.dao.EvolutionChainNetworkDao
+import com.mo.pokeapp.data.database.entity.EvolutionChainDbEntity
+import com.mo.pokeapp.data.database.entity.SpeciesDb
 import com.mo.pokeapp.data.dto.EvolutionChainResponse
-import com.mo.pokeapp.data.dto.EvolutionChainResponse.InnerChainDTO
+import com.mo.pokeapp.data.sharedpreferences.AppSharedPrefs
 import com.mo.pokeapp.data.viewobject.SpeciesVO
 import com.mo.pokeapp.network.APIService
 import com.mo.pokeapp.network.Result
@@ -15,43 +18,70 @@ import kotlin.collections.ArrayList
 
 class EvolutionChainRepo @Inject constructor(
     private val urlUtils: UrlUtils,
-    private val evolutionChainNetworkDao: EvolutionChainNetworkDao
+    private val evolutionChainNetworkDao: EvolutionChainNetworkDao,
+    private val evolutionChainDbDao: EvolutionChainDbDao,
+    private val prefs: AppSharedPrefs
 ) {
 
     suspend fun getEvolutionChain(url: String): Result<List<SpeciesVO>> =
         withContext(Dispatchers.IO) {
             try {
-                val result = evolutionChainNetworkDao.getSpeciesEvolutionChain(url)
-                Result.Success(mapNetworkResponseToViewObject(result))
+                val lastNetworkCall = prefs.getLong(url, 0)
+                if (prefs.getCurrentTime() - lastNetworkCall > AppSharedPrefs.SPECIES_DETAILS_CACHE_TTL) {
+                    // refresh cache
+                    refreshCache(url)
+                }
+
+                val entity = evolutionChainDbDao.getEvolutionChain(url)
+
+                Result.Success(mapDbEntityToViewObject(entity))
             } catch (e: Exception) {
                 Result.Error(e)
             }
         }
 
-    private fun mapNetworkResponseToViewObject(response: EvolutionChainResponse): List<SpeciesVO> {
+    private suspend fun refreshCache(url: String) {
+        val result = evolutionChainNetworkDao.getSpeciesEvolutionChain(url)
+        evolutionChainDbDao.insert(mapNetworkResponseToEvolutionEntity(url, result))
+        prefs.putLong(url, prefs.getCurrentTime())
+    }
 
-        if (response.chain.list.isEmpty()) return emptyList()
+    private fun mapNetworkResponseToEvolutionEntity(
+        url: String,
+        response: EvolutionChainResponse
+    ): EvolutionChainDbEntity {
 
-        val result = ArrayList<SpeciesVO>()
+        val chain = ArrayList<SpeciesDb>()
 
-        val q: Queue<InnerChainDTO> = LinkedList()
+        if (response.chain.list.isNotEmpty()) {
 
-        q.offer(response.chain.list[0])
+            val q: Queue<EvolutionChainResponse.InnerChainDTO> = LinkedList()
 
-        while (q.isNotEmpty()) {
-            val current = q.poll()
-            if (current != null) {
-                val speciesDto = current.species
-                val id = urlUtils.getLastPathSegment(speciesDto.url)
-                val speciesVO = SpeciesVO(speciesDto.name, speciesDto.url, APIService.photoUrl(id))
-                result.add(speciesVO)
+            q.offer(response.chain.list[0])
 
-                if (current.list.isNotEmpty()) {
-                    q.offer(current.list[0])
+            while (q.isNotEmpty()) {
+                val current = q.poll()
+                if (current != null) {
+                    val speciesDto = current.species
+                    val id = urlUtils.getLastPathSegment(speciesDto.url)
+                    val speciesDb =
+                        SpeciesDb(speciesDto.name, speciesDto.url, APIService.photoUrl(id))
+                    chain.add(speciesDb)
+
+                    if (current.list.isNotEmpty()) {
+                        q.offer(current.list[0])
+                    }
                 }
             }
         }
 
-        return result
+        return EvolutionChainDbEntity(url, chain)
+    }
+
+    private fun mapDbEntityToViewObject(entity: EvolutionChainDbEntity): List<SpeciesVO> {
+
+        return entity.list.map {
+            SpeciesVO(it.name, it.url, it.photoUrl)
+        }
     }
 }

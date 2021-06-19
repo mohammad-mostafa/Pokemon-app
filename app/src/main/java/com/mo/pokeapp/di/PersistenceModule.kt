@@ -1,6 +1,7 @@
 package com.mo.pokeapp.di
 
 import android.content.Context
+import com.mo.pokeapp.data.dao.EvolutionChainDbDao
 import com.mo.pokeapp.data.dao.SpeciesDetailsDbDao
 import com.mo.pokeapp.data.database.PokeDataBase
 import dagger.Module
@@ -14,7 +15,12 @@ import dagger.hilt.components.SingletonComponent
 class PersistenceModule {
 
     @Provides
-    fun provideWeatherDbDao(@ApplicationContext context: Context): SpeciesDetailsDbDao {
+    fun provideSpeciesDetailsDbDao(@ApplicationContext context: Context): SpeciesDetailsDbDao {
         return PokeDataBase.getInstance(context).speciesDetailsDbDao()
+    }
+
+    @Provides
+    fun provideEvolutionChainDbDao(@ApplicationContext context: Context): EvolutionChainDbDao {
+        return PokeDataBase.getInstance(context).evolutionChainDbDao()
     }
 }
