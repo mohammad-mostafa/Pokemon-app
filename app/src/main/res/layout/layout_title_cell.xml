@@ -7,7 +7,11 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/titleTv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:background="@color/secondary_variant"
+        android:gravity="center"
+        android:textColor="@color/primary"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
