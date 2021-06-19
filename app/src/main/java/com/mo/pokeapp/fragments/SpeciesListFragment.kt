@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.mo.pokeapp.R
 import com.mo.pokeapp.adapters.SpeciesListAdapter
 import com.mo.pokeapp.adapters.SpeciesViewHolder
 import com.mo.pokeapp.core.BaseFragment
@@ -77,7 +76,7 @@ class SpeciesListFragment : BaseFragment() {
             adapter.loadStateFlow.collectLatest { loadStates ->
 
                 binding.progressBar.isVisible = loadStates.refresh is LoadState.Loading
-                showErrorMsg(loadStates.refresh is LoadState.Error, getString(R.string.error_loading_list))
+                showErrorMsg(loadStates.refresh is LoadState.Error)
             }
         }
 
@@ -92,10 +91,9 @@ class SpeciesListFragment : BaseFragment() {
         })
     }
 
-    private fun showErrorMsg(show: Boolean, msg: String) {
+    private fun showErrorMsg(show: Boolean) {
 
         if (show) {
-            LayoutErrorBinding.inflate(layoutInflater).msgTv.text = msg
             errorBottomSheet.show()
         } else {
             if (errorBottomSheet.isShowing) errorBottomSheet.dismiss()

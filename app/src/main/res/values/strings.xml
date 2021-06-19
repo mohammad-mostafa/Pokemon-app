@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">PokeApp</string>
     <string name="ok">Ok</string>
-    <string name="error_loading_list">An error happened. Please, try again later.</string>
+    <string name="general_error">An error happened. Please, try again later.</string>
 </resources>
