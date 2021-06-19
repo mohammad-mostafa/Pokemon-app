@@ -6,4 +6,5 @@
     <string name="evolution_chain">Evolution chain</string>
     <string name="species_details_failure">Failed to load the details. Please try again later.</string>
     <string name="evolution_chain_failure">Failed to load the evolution chain. Please try again later.</string>
+    <string name="retry">Retry</string>
 </resources>

@@ -78,6 +78,7 @@ class DetailsFragment : BaseFragment() {
         viewModel.evolutionChain.observe(viewLifecycleOwner, {
             evolutionChainTitleAdapter.submitList(listOf(getString(R.string.evolution_chain)))
             evolutionChainAdapter.submitList(it)
+            binding.recyclerView.scrollToPosition(0)
         })
 
         viewModel.errorObservable.observe(viewLifecycleOwner, {

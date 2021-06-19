@@ -40,6 +40,7 @@ class SpeciesListFragment : BaseFragment() {
 
                 layoutErrorBinding.okButton.setOnClickListener {
                     bottomSheet.dismiss()
+                    adapter.retry()
                 }
             }
     }
