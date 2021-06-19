@@ -1,18 +1,21 @@
 package com.mo.pokeapp.adapters
 
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.mo.pokeapp.data.viewobject.SpeciesVO
 import com.mo.pokeapp.databinding.LayoutEvolutionCellBinding
+import com.mo.pokeapp.utils.ImageLoader
 
-class EvolutionChainItemViewHolder(private val binding: LayoutEvolutionCellBinding) :
+class EvolutionChainItemViewHolder(
+    private val binding: LayoutEvolutionCellBinding,
+    private val imageLoader: ImageLoader = ImageLoader()
+) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: SpeciesVO?) {
         binding.nameTv.text = item?.name
 
-        Glide.with(binding.root.context)
-            .load(item?.photoUrl)
-            .into(binding.logoIv)
+        item?.photoUrl?.let {
+            imageLoader.load(it, binding.logoIv)
+        }
     }
 }
