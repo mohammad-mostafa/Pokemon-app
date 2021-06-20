@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
@@ -73,6 +74,7 @@ class DetailsFragment : BaseFragment() {
             binding.nameTv.text = it.name
             flavorsTitleAdapter.submitList(listOf(getString(R.string.flavours)))
             flavorsAdapter.submitList(it.flavorTexts)
+            binding.progressBar.isVisible = false
         })
 
         viewModel.evolutionChain.observe(viewLifecycleOwner, {
@@ -86,6 +88,7 @@ class DetailsFragment : BaseFragment() {
             msg?.let {
                 showError(getString(msg))
             }
+            binding.progressBar.isVisible = false
         })
     }
 
